@@ -1,5 +1,12 @@
 from flask import Flask, jsonify, request
 from flask_restful import Api, Resource, reqparse, abort
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+
+uri = "mongodb+srv://isbravo:<password>@cluster1.kabn980.mongodb.net/?retryWrites=true&w=majority"
+# Create a new client and connect to the server
+client = MongoClient(uri, server_api=ServerApi('1'))
+
 
 app = Flask(__name__)
 api = Api(app)
