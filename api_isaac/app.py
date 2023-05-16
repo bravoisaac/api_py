@@ -1,108 +1,76 @@
+import hashlib
+import datetime
 from flask import Flask, jsonify, request
 from flask_restful import Api, Resource, reqparse, abort
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-
-uri = "mongodb+srv://isbravo:<password>@cluster1.kabn980.mongodb.net/?retryWrites=true&w=majority"
-# Create a new client and connect to the server
-client = MongoClient(uri, server_api=ServerApi('1'))
+from flask_jwt_extended import JWTManager, create_access_token
 
 
 app = Flask(__name__)
-api = Api(app)
-
-clientes = [
-    {
-        'id': 1,
-        'nombre': 'Juan',
-        'apellido1': 'andes',
-        'apellido2': 'feranades',
-        'DNI': '12345678A'
-    },
-    {
-        'id': 2,
-        'nombre': 'isaac',
-        'apellido1': 'peres',
-        'apellido2': 'bravo',
-        'DNI': '87654321B'
-    },
-
-]
-
-cliente_parser = reqparse.RequestParser()
-
-cliente_parser.add_argument('nombre', type=str, required=True, help='El campo nombre es obligatorio')
-cliente_parser.add_argument('apellido1', type=str, required=True, help='El campo apellido1 es obligatorio')
-cliente_parser.add_argument('apellido2', type=str, required=True, help='El campo apellido2 es obligatorio')
-cliente_parser.add_argument('DNI', type=str, required=True, help='El campo DNI es obligatorio')
-
-def buscar_cliente_por_id(id):
-
-    for cliente in clientes:
-        if cliente['id'] == id:
-            return cliente
-    return None
+jwt = JWTManager(app)
 
 
-class Clientes(Resource):
-
-    def get(self):
-
-        return jsonify(clientes)
-    
-    def post(self):
-        global clientes
-        nuevo_cliente = {
-            'id': clientes[-1]['id'] + 1,
-            'nombre': request.json['nombre'],
-            'apellido1': request.json['apellido1'],
-            'apellido2': request.json['apellido2'],
-            'DNI': request.json['DNI']
-        }
-        clientes.append(nuevo_cliente)
-        return jsonify(nuevo_cliente)
-
-class Cliente(Resource):
-
-    def get(self, id):
-
-        cliente = buscar_cliente_por_id(id)
-        if cliente:
-            return jsonify(cliente)
-        else:
-            abort(404, message=f'Cliente con ID {id} no encontrado')
-    
-    def put(self, id):
-
-        cliente = buscar_cliente_por_id(id)
-        if cliente:
-            args = cliente_parser.parse_args()
-
-            cliente['nombre'] = args['nombre']
-            cliente['apellido1'] = args['apellido1']
-            cliente['apellido2'] = args['apellido2']
-            cliente['DNI'] = args['DNI']
-            
-            return jsonify(cliente)
-        
-        else:
-            abort(404, message=f'Cliente con ID {id} no encontrado')
-    
-    def delete(self, id):
-        global clientes
-        cliente = buscar_cliente_por_id(id)
-        if cliente:
-            clientes = [c for c in clientes if c['id'] != id]
-            return {'message': f'Cliente con ID {id} eliminado correctamente'}
-        else:
-            abort(404, message=f'Cliente con ID {id} no encontrado')
+app.config['JWT_SECRET_KEY']= "DuocCode"
+app.config['JWT_ACCESS_TOKEN_EXPIRES']=datetime.timedelta(days=1)
 
 
-api.add_resource(Clientes, '/clientes')
+uri = "mongodb+srv://isbravo:ktLGzXsKDnufOr3g@cluster1.kabn980.mongodb.net/?retryWrites=true&w=majority"
+# Create a new client and connect to the server
+client = MongoClient(uri, server_api=ServerApi('1'))
+db =  client["demoUnab"]
+user_collection =db["users"]
 
-api.add_resource(Cliente, '/clientes/<int:id>')
+
+@app.route("/api/v1/users", methods=["POST"])
+def create_user():
+    new_user= request.get_json()
+    new_user["password"] =  hashlib.sha256(new_user["password"].encode("utf-8")).hexdigest()
+    doc =  user_collection.find_one({"username" : new_user["username"]})
+    if not doc:
+         user_collection.insert_one(new_user)
+         return jsonify({"status" : "Usuario creado con exito"})
+    else:
+         return jsonify({"status" : "Usuario ya existe"})
+
+
+@app.route("/api/v1/login", methods=["POST"])
+def login():
+     login_details = request.get_json()
+     user = user_collection.find_one({"username" : login_details["username"]})
+     if user:
+          enc_pass = hashlib .sha256(login_details['password'].encode("utf-8")).hexdigest()
+          if enc_pass ==user["password"]:
+               access_token= create_access_token(identity=user["username"])
+               return jsonify(access_token= access_token),200
+
+     return jsonify({'msg':'Credenciales incorrectas'}),401
+
+
+
+@app.route("/api/v1/usersAll",methods=["GET"])
+#@jwt_required()
+def get_all_users():
+     users = user_collection.find()
+     data=[]
+     for user in users:
+          user["_id"] = str(user["_id"])
+          data.append(user) 
+     return jsonify(data)
+
+
+@app.route("/api/v1/user/<user_id>",methods=["DELETE"])
+#@jwt_required()
+def delete(user_id):
+   
+          delete_user = user_collection.delete_one({'_id':ObjectId(user_id)})
+          if delete_user.deleted_count>0:
+               return jsonify({"status" : "Usuario eliminado con exito"}),204
+          else:
+               return "",404
+  
 
 
 if __name__ == '__main__':
+     app.run(debug=True) 
 
-    app.run(debug=True)
