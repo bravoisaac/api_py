@@ -1,90 +1,66 @@
+import datetime
+from bson import ObjectId
 from flask import Flask, jsonify, request
 from flask_restful import Api, Resource, reqparse, abort
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+from flask_jwt_extended import JWTManager, create_access_token
+
 
 app = Flask(__name__)
-api = Api(app)
-
-productos = [
-    {
-        'id': 1,
-        'marca': 'lenovo',
-        'nombre': 'note',
-        'precio': 150000,
-        'descripcion': 'pc note'
-    },
-    {
-        'id': 2,
-        'marca': 'lenovo',
-        'nombre': 'mause',
-        'precio': 13000,
-        'descripcion': 'mause de pc'
-    }
-]
-
-producto_parser = reqparse.RequestParser()
-
-producto_parser.add_argument('nombre', type=str, required=True, help='El campo nombre es obligatorio')
-producto_parser.add_argument('marca', type=str, required=True, help='El campo marca es obligatorio')
-producto_parser.add_argument('precio', type=float, required=True, help='El campo precio es obligatorio')
-producto_parser.add_argument('descripcion', type=str, required=True, help='El campo descripcion es obligatorio')
-
-def buscar_producto_por_id(id):
-    for producto in productos:
-        if producto['id'] == id:
-            return producto
-    return None
+jwt = JWTManager(app)
 
 
-class Productos(Resource):
-
-    def get(self):
-        return jsonify(productos)
-    
-    def post(self):
-        global productos
-        nuevo_producto = {
-            'id': productos[-1]['id'] + 1,
-            'nombre': request.json['nombre'],
-            'marca': request.json['marca'],
-            'precio': request.json['precio'],
-            'descripcion': request.json['descripcion']
-        }
-        productos.append(nuevo_producto)
-        return jsonify(nuevo_producto)
-
-class Producto(Resource):
-
-    def get(self, id):
-        producto = buscar_producto_por_id(id)
-        if producto:
-            return jsonify(producto)
-        else:
-            abort(404, message=f'Producto con ID {id} no encontrado')
-    
-    def put(self, id):
-        producto = buscar_producto_por_id(id)
-        if producto:
-            args = producto_parser.parse_args()
-            producto['nombre'] = args['nombre']
-            producto['marca'] = args['marca']
-            producto['precio'] = args['precio']
-            producto['descripcion'] = args['descripcion']
-            return jsonify(producto)
-        else:
-            abort(404, message=f'Producto con ID {id} no encontrado')
-    
-    def delete(self, id):
-        global productos
-        producto = buscar_producto_por_id(id)
-        if producto:
-            productos = [p for p in productos if p['id'] != id]
-            return {'message': f'Producto con ID {id} eliminado correctamente'}
-        else:
-            abort(404, message=f'Producto con ID {id} no encontrado')
+app.config['JWT_SECRET_KEY']= "DuocCode"
+app.config['JWT_ACCESS_TOKEN_EXPIRES']=datetime.timedelta(days=1)
 
 
-api.add_resource(Productos, '/productos')
-api.add_resource(Producto, '/productos/<int:id>')
+uri = "mongodb+srv://isbravo:ktLGzXsKDnufOr3g@cluster1.kabn980.mongodb.net/?retryWrites=true&w=majority"
+# Create a new client and connect to the server
+client = MongoClient(uri, server_api=ServerApi('1'))
+db =  client["demoUnab"]
+product_collection =db["produc"]
+
+@app.route("/api/v1/products", methods=["POST"])
+def create_product():
+    new_product = request.get_json()
+    product_collection.insert_one(new_product)
+    return jsonify({"status": "Producto creado con éxito"})
+
+
+@app.route("/api/v1/productsAll", methods=["GET"])
+def get_all_products():
+    products = product_collection.find()
+    data = [product for product in products]
+    for product in data:
+        product["_id"] = str(product["_id"])
+    return jsonify(data)
+
+
+@app.route("/api/v1/product/<product_id>", methods=["GET"])
+def get_product(product_id):
+    product = product_collection.find_one({'_id': ObjectId(product_id)})
+    if product:
+        product["_id"] = str(product["_id"])
+        return jsonify(product)
+    return "", 404
+
+
+@app.route("/api/v1/product/<product_id>", methods=["PUT"])
+def update_product(product_id):
+    updated_product = request.get_json()
+    result = product_collection.update_one({'_id': ObjectId(product_id)}, {'$set': updated_product})
+    if result.modified_count > 0:
+        return jsonify({"status": "Producto actualizado con éxito"})
+    return "", 404
+
+
+@app.route("/api/v1/product/<product_id>", methods=["DELETE"])
+def delete_product(product_id):
+    result = product_collection.delete_one({'_id': ObjectId(product_id)})
+    if result.deleted_count > 0:
+        return jsonify({"status": "Producto eliminado con éxito"}), 204
+    return "", 404
 
 
 if __name__ == '__main__':
