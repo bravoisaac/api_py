@@ -16,18 +16,19 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES']=datetime.timedelta(days=1)
 
 
 uri = "mongodb+srv://isbravo:ktLGzXsKDnufOr3g@cluster1.kabn980.mongodb.net/?retryWrites=true&w=majority"
-# Create a new client and connect to the server
+# Crea un nuevo cliente y conéctate al servidor
 client = MongoClient(uri, server_api=ServerApi('1'))
 db =  client["demoUnab"]
 product_collection =db["produc"]
 
+# Crea un new Producto
 @app.route("/api/v1/products", methods=["POST"])
 def create_product():
     new_product = request.get_json()
     product_collection.insert_one(new_product)
     return jsonify({"status": "Producto creado con éxito"})
 
-
+# buscar todos los Producto
 @app.route("/api/v1/productsAll", methods=["GET"])
 def get_all_products():
     products = product_collection.find()
@@ -36,7 +37,7 @@ def get_all_products():
         product["_id"] = str(product["_id"])
     return jsonify(data)
 
-
+# buscar un Producto por id
 @app.route("/api/v1/product/<product_id>", methods=["GET"])
 def get_product(product_id):
     product = product_collection.find_one({'_id': ObjectId(product_id)})
@@ -45,7 +46,7 @@ def get_product(product_id):
         return jsonify(product)
     return "", 404
 
-
+# canviar un Producto por id
 @app.route("/api/v1/product/<product_id>", methods=["PUT"])
 def update_product(product_id):
     updated_product = request.get_json()
@@ -54,7 +55,7 @@ def update_product(product_id):
         return jsonify({"status": "Producto actualizado con éxito"})
     return "", 404
 
-
+# eliminar un Producto por id
 @app.route("/api/v1/product/<product_id>", methods=["DELETE"])
 def delete_product(product_id):
     result = product_collection.delete_one({'_id': ObjectId(product_id)})

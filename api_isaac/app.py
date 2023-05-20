@@ -7,22 +7,19 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from flask_jwt_extended import JWTManager, create_access_token
 
-
 app = Flask(__name__)
 jwt = JWTManager(app)
-
 
 app.config['JWT_SECRET_KEY']= "DuocCode"
 app.config['JWT_ACCESS_TOKEN_EXPIRES']=datetime.timedelta(days=1)
 
-
 uri = "mongodb+srv://isbravo:ktLGzXsKDnufOr3g@cluster1.kabn980.mongodb.net/?retryWrites=true&w=majority"
-# Create a new client and connect to the server
+# Crea un nuevo cliente y conéctate al servidor
 client = MongoClient(uri, server_api=ServerApi('1'))
 db =  client["demoUnab"]
 user_collection =db["users"]
 
-
+# agregar un new user
 @app.route("/api/v1/users", methods=["POST"])
 def create_user():
     new_user= request.get_json()
@@ -34,7 +31,7 @@ def create_user():
     else:
          return jsonify({"status" : "Usuario ya existe"})
 
-
+# agregar un new login
 @app.route("/api/v1/login", methods=["POST"])
 def login():
      login_details = request.get_json()
@@ -47,8 +44,7 @@ def login():
 
      return jsonify({'msg':'Credenciales incorrectas'}),401
 
-
-
+# buscar todos los user
 @app.route("/api/v1/usersAll",methods=["GET"])
 #@jwt_required()
 def get_all_users():
@@ -59,7 +55,16 @@ def get_all_users():
           data.append(user) 
      return jsonify(data)
 
+# buscar un user por id
+@app.route("/api/v1/users/<users_id>", methods=["GET"])
+def get_users(users_id):
+    users = user_collection.find_one({'_id': ObjectId(users_id)})
+    if users:
+        users["_id"] = str(users["_id"])
+        return jsonify(users)
+    return "", 404
 
+# eliminar un user por id
 @app.route("/api/v1/user/<user_id>",methods=["DELETE"])
 #@jwt_required()
 def delete(user_id):
@@ -69,9 +74,7 @@ def delete(user_id):
                return jsonify({"status" : "Usuario eliminado con exito"}),204
           else:
                return "",404
-  
-
 
 if __name__ == '__main__':
-     app.run(debug=True) 
 
+     app.run(debug=True) 
