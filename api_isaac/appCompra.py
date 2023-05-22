@@ -18,16 +18,16 @@ uri = "mongodb+srv://isbravo:ktLGzXsKDnufOr3g@cluster1.kabn980.mongodb.net/?retr
 # Crea un nuevo cliente y conéctate al servidor
 client = MongoClient(uri, server_api=ServerApi('1'))
 db =  client["demoUnab"]
-product_collection = db["product"]
-cliente_collection = db["cliente"]
+product_collection = db["produc"]
+cliente_collection = db["users"]
 order_collection = db["order"]
 
 
 @app.route("/api/v1/orders", methods=["POST"])
 def create_order():
     new_order = request.get_json()
-    cliente_id = new_order.get("cliente_id")
-    product_id = new_order.get("product_id")
+    cliente_id = new_order.get("users_id")
+    product_id = new_order.get("produc_id")
     
     # Verificar si el cliente existe
     cliente = cliente_collection.find_one({'_id': ObjectId(cliente_id)})
