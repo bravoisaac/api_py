@@ -78,3 +78,9 @@ def delete(user_id):
 if __name__ == '__main__':
 
      app.run(debug=True) 
+
+# como generar un cliente
+#{
+#     "username":"jase",
+#     "password":"111112"
+#}

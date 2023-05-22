@@ -96,3 +96,10 @@ def delete_order(order_id):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+# como generar un pedido nesesitas el id del user y del produto con su stok
+#{
+#  "users_id": "6464037c0a4eb752b6c7c966",
+#  "produc_id": "646aeebaeaae2aef3abb7c8e",
+#  "quantity": 1
+#}

@@ -66,3 +66,12 @@ def delete_product(product_id):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+# como generar un producto 
+#{
+#    "name": "PC Gamer Ultimate",
+#    "description": "Potente computadora para juegos de última generación",
+#    "price": 2499.99,
+#    "marca":"azus",
+#    "stock": 5
+#}
