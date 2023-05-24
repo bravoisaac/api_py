@@ -8,7 +8,7 @@ Esta API permite realizar operaciones relacionadas con la gestión de usuarios.
 **dependencias impor:**
   -impor a ejecutar:
     
-        **pip install flask_jwt_extended**
+        pip install flask_jwt_extended
         pip install pymongo
         pip install flask_restful
         pip install flask  
