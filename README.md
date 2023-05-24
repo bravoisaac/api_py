@@ -22,7 +22,8 @@ Esta API permite realizar operaciones relacionadas con la gestión de usuarios.
   - Ejemplo de POST:
     ```
     {
-        "status": "Usuario creado con éxito"
+        "username":"jase",
+        "password":"111112"
     }
     ```
 
@@ -31,8 +32,7 @@ Esta API permite realizar operaciones relacionadas con la gestión de usuarios.
   - Ejemplo de respuesta:
     ```
     {
-        "username":"jase",
-        "password":"111112"
+        "status": "Usuario creado con éxito"
     }
     ```
 
