@@ -134,6 +134,170 @@ Para obtener un usuario por su ID, realiza una solicitud GET a la URL `/api/v1/u
 
 #### Uso:
 Para eliminar un usuario por su ID, realiza una solicitud DELETE a la URL `/api/v1/user/<user_id>`, donde `<user_id>` es el ID del usuario que deseas eliminar. Se devolverá un código de estado 204 si el usuario se eliminó correctamente, de lo contrario, se devolverá un código de estado 404.
+Aquí tienes la documentación de la API proporcionada con referencias sobre cómo utilizar cada función:
+
+# API de Productos
+
+Esta API permite realizar operaciones relacionadas con la gestión de productos.
+
+## Endpoints
+
+### 1. Agregar un nuevo producto
+
+**URL:** `/api/v1/products`
+
+**Método:** `POST`
+
+**Descripción:** Agrega un nuevo producto a la base de datos.
+
+**Parámetros de entrada:**
+- `name` (cadena): Nombre del nuevo producto.
+- `description` (cadena): Descripción del nuevo producto.
+- `price` (número): Precio del nuevo producto.
+- `marca` (cadena): Marca del nuevo producto.
+- `stock` (entero): Cantidad en stock del nuevo producto.
+
+**Parámetros de entrada ejemplo posman:**
+  - Ejemplo de POST:
+    ```
+    {
+        "name": "PC Gamer Ultimate",
+        "description": "Potente computadora para juegos de última generación",
+        "price": 2499.99,
+        "marca":"azus",
+        "stock": 5
+    }
+    ```
+
+**Respuestas:**
+- Código 200 OK: El producto se agregó correctamente.
+  - Ejemplo de respuesta:
+    ```
+    {
+        "status": "Producto creado con éxito"
+    }
+    ```
+
+#### Uso:
+Para agregar un nuevo producto, realiza una solicitud POST a la URL `/api/v1/products` con los parámetros `name`, `description`, `price`, `marca` y `stock` en el cuerpo de la solicitud. Los valores deben proporcionarse de acuerdo a los tipos especificados. 
+
+### 2. Obtener todos los productos
+
+**URL:** `/api/v1/productsAll`
+
+**Método:** `GET`
+
+**Descripción:** Obtiene todos los productos registrados en la base de datos.
+
+**Respuestas:**
+- Código 200 OK: Se obtienen los productos correctamente.
+  - Ejemplo de respuesta:
+    ```
+    [
+        {
+            "_id": "<ID>",
+            "name": "<name>",
+            "description": "<description>",
+            "price": <price>,
+            "marca": "<marca>",
+            "stock": <stock>
+        },
+        ...
+    ]
+    ```
+
+#### Uso:
+Para obtener todos los productos, realiza una solicitud GET a la URL `/api/v1/productsAll`. Se devolverá una lista de todos los productos registrados en la base de datos.
+
+### 3. Obtener un producto por ID
+
+**URL:** `/api/v1/product/<product_id>`
+
+**Método:** `GET`
+
+**Descripción:** Obtiene un producto específico según su ID.
+
+**Parámetros de entrada:**
+- `product_id` (cadena): ID del producto.
+
+**Respuestas:**
+- Código 200 OK: Se obtiene el producto correctamente.
+  - Ejemplo de respuesta:
+    ```
+    {
+        "_id": "<ID>",
+        "name": "<name>",
+        "description": "<description>",
+        "price": <price>,
+        "marca": "<marca>",
+        "stock": <stock>
+    }
+    ```
+- Código 404 Not Found: No se encontró ningún producto con el ID especificado.
+
+#### Uso:
+Para obtener un producto por su ID, realiza una solicitud GET a la URL `/api/v1/product/<product_id>`, donde `<product_id>` es el ID del producto que deseas obtener. Se devolverá el producto correspondiente si se encuentra, de lo contrario, se devolverá un código de estado 404.
+
+### 4. Actualizar un producto por ID
+
+**
+
+URL:** `/api/v1/product/<product_id>`
+
+**Método:** `PUT`
+
+**Descripción:** Actualiza un producto específico según su ID.
+
+**Parámetros de entrada:**
+- `product_id` (cadena): ID del producto.
+- `name` (cadena): Nuevo nombre del producto.
+- `description` (cadena): Nueva descripción del producto.
+- `price` (número): Nuevo precio del producto.
+- `marca` (cadena): Nueva marca del producto.
+- `stock` (entero): Nueva cantidad en stock del producto.
+
+**Parámetros de entrada ejemplo posman:**
+  - Ejemplo de PUT:
+    ```
+    {
+        "name": "Nuevo nombre del producto",
+        "description": "Nueva descripción del producto",
+        "price": 99.99,
+        "marca":"Nueva marca del producto",
+        "stock": 10
+    }
+    ```
+
+**Respuestas:**
+- Código 200 OK: El producto se actualizó correctamente.
+  - Ejemplo de respuesta:
+    ```
+    {
+        "status": "Producto actualizado con éxito"
+    }
+    ```
+- Código 404 Not Found: No se encontró ningún producto con el ID especificado.
+
+#### Uso:
+Para actualizar un producto por su ID, realiza una solicitud PUT a la URL `/api/v1/product/<product_id>`, donde `<product_id>` es el ID del producto que deseas actualizar. Los parámetros `name`, `description`, `price`, `marca` y `stock` deben proporcionarse en el cuerpo de la solicitud con los nuevos valores que deseas asignar al producto.
+
+### 5. Eliminar un producto por ID
+
+**URL:** `/api/v1/product/<product_id>`
+
+**Método:** `DELETE`
+
+**Descripción:** Elimina un producto específico según su ID.
+
+**Parámetros de entrada:**
+- `product_id` (cadena): ID del producto.
+
+**Respuestas:**
+- Código 204 No Content: El producto se eliminó correctamente.
+- Código 404 Not Found: No se encontró ningún producto con el ID especificado.
+
+#### Uso:
+Para eliminar un producto por su ID, realiza una solicitud DELETE a la URL `/api/v1/product/<product_id>`, donde `<product_id>` es el ID del producto que deseas eliminar. Se devolverá un código de estado 204 si el producto se eliminó correctamente, de lo contrario, se devolverá un código de estado 404.
 
 # Notas importantes
 
