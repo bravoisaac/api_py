@@ -22,8 +22,8 @@ Esta API permite realizar operaciones relacionadas con la gestión de usuarios.
   - Ejemplo de POST:
     ```
     {
-        "username":"jase",
-        "password":"111112"
+        "username":"Test",
+        "password":"111111"
     }
     ```
 
