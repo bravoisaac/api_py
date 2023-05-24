@@ -5,6 +5,14 @@ Aquí tienes la documentación de la API proporcionada con referencias sobre có
 Esta API permite realizar operaciones relacionadas con la gestión de usuarios.
 
 ## Endpoints
+**Parámetros de entrada ejemplo posman:**
+  - Ejemplo de POST:
+    ```
+    {
+        "username":"Test",
+        "password":"111111"
+    }
+    ```
 
 ### 1. Agregar un nuevo usuario
 
