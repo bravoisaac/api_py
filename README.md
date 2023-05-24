@@ -1,10 +1,4 @@
-Aquí tienes la documentación de la API proporcionada con referencias sobre cómo utilizar cada función:
 
-# API de Usuarios
-
-Esta API permite realizar operaciones relacionadas con la gestión de usuarios.
-
-## Endpoints
 **instalar dependencias:**
     
         pip install flask_jwt_extended
@@ -12,8 +6,22 @@ Esta API permite realizar operaciones relacionadas con la gestión de usuarios.
         pip install flask_restful
         pip install flask  
         pip install bson 
-    
+        
 
+**iniciar servidor:**
+    ```
+    {
+        "python app.py",
+        "python appProducto.py",
+        "python appCompra.py ",
+    }
+    ```
+
+# API de Usuarios
+
+Esta API permite realizar operaciones relacionadas con la gestión de usuarios.
+
+## Endpoints
 ### 1. Agregar un nuevo usuario
 
 **URL:** `/api/v1/users`
