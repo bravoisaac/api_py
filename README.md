@@ -298,8 +298,118 @@ Para actualizar un producto por su ID, realiza una solicitud PUT a la URL `/api/
 
 #### Uso:
 Para eliminar un producto por su ID, realiza una solicitud DELETE a la URL `/api/v1/product/<product_id>`, donde `<product_id>` es el ID del producto que deseas eliminar. Se devolverá un código de estado 204 si el producto se eliminó correctamente, de lo contrario, se devolverá un código de estado 404.
+Aquí tienes la documentación de la API que has proporcionado:
 
-# Notas importantes
+# API de Pedidos
+
+Esta API permite realizar operaciones relacionadas con la gestión de pedidos.
+
+## Endpoints
+
+### 1. Crear un nuevo pedido
+
+**URL:** `/api/v1/orders`
+
+**Método:** `POST`
+
+**Descripción:** Crea un nuevo pedido.
+
+**Parámetros de entrada:**
+- `users_id` (cadena): ID del cliente que realiza el pedido.
+- `produc_id` (cadena): ID del producto solicitado en el pedido.
+- `quantity` (entero): Cantidad del producto solicitado.
+
+**Parámetros de entrada ejemplo Posman:**
+  - Ejemplo de POST:
+    ```
+    {
+        "users_id": "6464037c0a4eb752b6c7c966",
+        "produc_id": "646aeebaeaae2aef3abb7c8e",
+        "quantity": 1
+    }
+    ```
+
+**Respuestas:**
+- Código 200 OK: El pedido se creó correctamente.
+  - Ejemplo de respuesta:
+    ```
+    {
+        "status": "Pedido creado con éxito"
+    }
+    ```
+- Código 404 Not Found:
+  - Si no se encuentra el cliente con el ID especificado: `{"status": "Cliente no encontrado"}`.
+  - Si no se encuentra el producto con el ID especificado: `{"status": "Producto no encontrado"}`.
+- Código 400 Bad Request: Si el producto no tiene stock suficiente.
+  - Ejemplo de respuesta: `{"status": "Stock insuficiente"}`.
+
+#### Uso:
+Para crear un nuevo pedido, realiza una solicitud POST a la URL `/api/v1/orders` con los parámetros `users_id`, `produc_id` y `quantity` en el cuerpo de la solicitud. Asegúrate de proporcionar los IDs válidos del cliente y el producto, así como la cantidad requerida. Si el cliente y el producto existen y hay suficiente stock disponible, se creará el pedido y se actualizará el stock del producto.
+
+### 2. Actualizar un pedido por ID
+
+**URL:** `/api/v1/order/<order_id>`
+
+**Método:** `PUT`
+
+**Descripción:** Actualiza un pedido específico según su ID.
+
+**Parámetros de entrada:**
+- `order_id` (cadena): ID del pedido.
+- `users_id` (cadena): Nuevo ID del cliente que realiza el pedido.
+- `produc_id` (cadena): Nuevo ID del producto solicitado en el pedido.
+- `quantity` (entero): Nueva cantidad del producto solicitado.
+
+**Parámetros de entrada ejemplo Posman:**
+  - Ejemplo de PUT:
+    ```
+    {
+        "users_id": "6464037c0a4eb752b6c7c966",
+        "produc_id": "646aeebaeaae2aef3abb7c8e",
+        "quantity": 2
+    }
+    ```
+
+**Respuestas:**
+- Código 200 OK: El pedido se actualizó correctamente.
+  - Ejemplo de respuesta:
+    ```
+    {
+        "status": "Pedido actualizado con éxito"
+    }
+    ```
+- Código 404 Not Found:
+  - Si no se encuentra el pedido con el ID especificado: `{"status": "Pedido no encontrado"}`.
+  - Si no se encuentra el cliente con el ID especificado: `{"status": "Cliente no encontrado"}`.
+  - Si no se encuentra el producto con el ID especific
+
+ado: `{"status": "Producto no encontrado"}`.
+- Código 400 Bad Request: Si el producto no tiene stock suficiente.
+  - Ejemplo de respuesta: `{"status": "Stock insuficiente"}`.
+
+#### Uso:
+Para actualizar un pedido por su ID, realiza una solicitud PUT a la URL `/api/v1/order/<order_id>`, donde `<order_id>` es el ID del pedido que deseas actualizar. Los parámetros `users_id`, `produc_id` y `quantity` deben proporcionarse en el cuerpo de la solicitud con los nuevos valores que deseas asignar al pedido. Asegúrate de proporcionar IDs válidos del cliente y el producto, y verificar que haya suficiente stock disponible antes de actualizar el pedido.
+
+### 3. Eliminar un pedido por ID
+
+**URL:** `/api/v1/order/<order_id>`
+
+**Método:** `DELETE`
+
+**Descripción:** Elimina un pedido específico según su ID.
+
+**Parámetros de entrada:**
+- `order_id` (cadena): ID del pedido.
+
+**Respuestas:**
+- Código 204 No Content: El pedido se eliminó correctamente.
+- Código 404 Not Found: No se encontró ningún pedido con el ID especificado.
+
+#### Uso:
+Para eliminar un pedido por su ID, realiza una solicitud DELETE a la URL `/api/v1/order/<order_id>`, donde `<order_id>` es el ID del pedido que deseas eliminar. Se devolverá un código de estado 204 si el pedido se eliminó correctamente, de lo contrario, se devolverá un código de estado 404.
+
+## Notas importantes
 
 - Se requiere la conexión a una base de datos MongoDB. El URI de conexión está configurado en el código de la aplicación.
 - Algunas rutas de los endpoints están comentadas con la anotación `#@jwt_required()`, lo cual indica que se requiere autenticación mediante JSON Web Tokens (JWT) para acceder a ellas.
+- Asegúrate de proporcionar IDs válidos del cliente y el producto, y verificar el stock disponible antes de realizar operaciones de creación y actualización de pedidos.
