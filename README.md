@@ -20,10 +20,10 @@ Esta API permite realizar operaciones relacionadas con la gestión de usuarios.
 
 **Parámetros de entrada ejemplo posman:**
     ```
-{
-     "username":"jase",
-     "password":"111112"
-}
+    {
+         "username":"jase",
+        "password":"111112"
+    }
     ```
 
 **Respuestas:**
