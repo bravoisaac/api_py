@@ -19,7 +19,7 @@ Esta API permite realizar operaciones relacionadas con la gestión de usuarios.
 - `password` (cadena): Contraseña del nuevo usuario.
 
 **Parámetros de entrada ejemplo posman:**
-  - Ejemplo de respuesta:
+  - Ejemplo de POST:
     ```
     {
         "status": "Usuario creado con éxito"
@@ -31,7 +31,8 @@ Esta API permite realizar operaciones relacionadas con la gestión de usuarios.
   - Ejemplo de respuesta:
     ```
     {
-        "status": "Usuario creado con éxito"
+        "username":"jase",
+        "password":"111112"
     }
     ```
 
