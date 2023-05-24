@@ -5,12 +5,15 @@ Aquí tienes la documentación de la API proporcionada con referencias sobre có
 Esta API permite realizar operaciones relacionadas con la gestión de usuarios.
 
 ## Endpoints
-**Parámetros de entrada ejemplo posman:**
-  - Ejemplo de POST:
+**dependencias impor:**
+  -impor a ejecutar:
     ```
     {
-        "username":"Test",
-        "password":"111111"
+        pip install flask_jwt_extended
+        pip install pymongo
+        pip install flask_restful
+        pip install flask  
+        pip install bson 
     }
     ```
 
