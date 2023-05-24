@@ -9,13 +9,11 @@
         
 
 **iniciar servidor:**
-    ```
-    {
-        "python app.py",
-        "python appProducto.py",
-        "python appCompra.py ",
-    }
-    ```
+
+        python app.py
+        python appProducto.py
+        python appCompra.py 
+
 
 # API de Usuarios
 
