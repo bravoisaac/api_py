@@ -5,8 +5,7 @@ Aquí tienes la documentación de la API proporcionada con referencias sobre có
 Esta API permite realizar operaciones relacionadas con la gestión de usuarios.
 
 ## Endpoints
-**dependencias impor:**
-  -impor a ejecutar:
+**instalar dependencias:**
     
         pip install flask_jwt_extended
         pip install pymongo
