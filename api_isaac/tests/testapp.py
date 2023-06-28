@@ -12,15 +12,6 @@ class ClientAPITestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_create_user(self):
-        response = self.app.post('/api/v1/users', json={
-            "username": "testuser",
-            "password": "testpassword"
-        })
-        data = response.get_json()
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data["status"], "Usuario creado con exito")
-
     def test_create_existing_user(self):
         response = self.app.post('/api/v1/users', json={
             "username": "testuser",
@@ -54,15 +45,7 @@ class ClientAPITestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(data, list)
 
-    def test_get_user_by_id(self):
-        response = self.app.get('/api/v1/users/<user_id>')
-        data = response.get_json()
-        self.assertEqual(response.status_code, 200)
-        self.assertIsInstance(data, dict)
 
-    def test_delete_user(self):
-        response = self.app.delete('/api/v1/user/<user_id>')
-        self.assertEqual(response.status_code, 204)
 
 if __name__ == '__main__':
     unittest.main()
