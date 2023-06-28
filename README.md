@@ -13,7 +13,14 @@
         python app.py
         python appProducto.py
         python appCompra.py 
+        
 
+**iniciar tests:**
+
+        python -m unittest tests.testProducto
+        python -m unittest tests.testCompra  
+        python -m unittest tests.testapp
+        
 
 # API de Usuarios
 
